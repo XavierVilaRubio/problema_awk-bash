@@ -1,4 +1,5 @@
 file=$1
+title=$(echo $file | awk -F'.' '{print $1}')
 awk -F, ' \
 NR==1{
 	for(i=1;i<=NF;i++)
@@ -13,7 +14,8 @@ NR>1{
 	}
 	print (NR-1!=lines) ? "  }," : "  }"
 }
-END{print" ]\n}"} ' \
+END{print" ]\n}"NR lines} ' \
 lines=$(wc -l < $file) \
 title=$(echo $file | awk -F'.' '{print $1}') \
-$file
+$file > ${title}.json
+echo "The output is in ${title}.json"
